@@ -1,7 +1,4 @@
 var S = require('pull-stream')
-var cat = require('pull-cat')
-var Deferred = require('pull-defer').source
-var Abortable = require('pull-abortable')
 var Flume = require('flumedb')
 var Log = require('flumelog-memory')
 
