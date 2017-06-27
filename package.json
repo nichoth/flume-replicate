@@ -1,4 +1,6 @@
 {
+  "scripts": {
+  },
   "devDependencies": {
     "flumedb": "^0.2.3",
     "flumelog-memory": "^0.1.2",
