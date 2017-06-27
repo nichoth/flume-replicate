@@ -56,7 +56,7 @@ db.append({ livetest: 'test' }, function () {})
 
 The log entries need to be in the same order in the stream as they are in  `db1`, because the flumelog-\* modules control creating the sequence number.
 
-This replication is *asynchronous*. After you write to db1, there is no guarantee if or when it will be backed up in db2. The sequence is exposed on `db.since`, an observable, so you could check there if they are at the same state.
+This replication is *asynchronous*. After you write to db1, there is no guarantee if or when it will be backed up in db2. The sequence is exposed on `db.since`, an observable, so you could check there if the two dbs are at the same state.
 
 How would you implement synchronous replication? You would need to do it at the flumelog-\* level, because that's where you callback after writing.
 

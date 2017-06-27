@@ -39,10 +39,11 @@ items.forEach(function (obj) {
 // copy to db2
 S(
     db.stream({ gt: db2.since.value, live: true }),
+    S.asyncMap(function (ev, cb) {
+        db2.append(ev.value, cb)
+    }),
     S.drain(function onEvent (ev) {
-        db2.append(ev.value, function (err, seq) {
-            // console.log('append', err, seq)
-        })
+        // we don't need to do anything here
     }, function onEnd (err) {
         console.log('end', err)
     })
