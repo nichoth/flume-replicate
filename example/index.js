@@ -36,19 +36,27 @@ items.forEach(function (obj) {
     })
 })
 
-// copy to db2
-S(
-    db.stream({ gt: db2.since.value, live: true }),
-    S.asyncMap(function (ev, cb) {
-        db2.append(ev.value, cb)
-    }),
-    S.drain(function onEvent (ev) {
-        // we don't need to do anything here
-    }, function onEnd (err) {
-        console.log('end', err)
-    })
-)
+// now we are replicating
+replicate(db, db2)
 
-db.append({ livetest: 'test' }, function () {})
+// future writes to `db` should be replicated too
+process.nextTick(function () {
+    db.append({ livetest: 'test' }, function () {})
+})
+
+function replicate (db, db2) {
+    // copy to db2
+    S(
+        db.stream({ gt: db2.since.value, live: true }),
+        S.asyncMap(function (ev, cb) {
+            db2.append(ev.value, cb)
+        }),
+        S.drain(function onEvent (ev) {
+            // we don't need to do anything here
+        }, function onEnd (err) {
+            console.log('end', err)
+        })
+    )
+}
 
 
