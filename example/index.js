@@ -4,7 +4,6 @@ var Deferred = require('pull-defer').source
 var Abortable = require('pull-abortable')
 var Flume = require('flumedb')
 var Log = require('flumelog-memory')
-var Replicate = require('../')
 
 var db = Flume(Log())
 var db2 = Flume(Log())
@@ -37,14 +36,17 @@ items.forEach(function (obj) {
 })
 
 // now we are replicating
-replicate(db, db2)
+replicate(db, db2, function onEnd (err) {
+    if (err) return console.log('error!', err)
+    console.log('end')
+})
 
 // future writes to `db` should be replicated too
 process.nextTick(function () {
     db.append({ livetest: 'test' }, function () {})
 })
 
-function replicate (db, db2) {
+function replicate (db, db2, cb) {
     // copy to db2
     S(
         db.stream({ gt: db2.since.value, live: true }),
@@ -54,7 +56,7 @@ function replicate (db, db2) {
         S.drain(function onEvent (ev) {
             // we don't need to do anything here
         }, function onEnd (err) {
-            console.log('end', err)
+            cb(err)
         })
     )
 }
