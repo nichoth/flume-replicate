@@ -53,6 +53,8 @@ process.nextTick(function () {
 function replicate (db, db2, cb) {
     // copy to db2
     S(
+        // NOTE --- this only works if both dbs are using the same
+        // log module, because the db.since values have to match
         db.stream({ gt: db2.since.value, live: true }),
         S.asyncMap(function (ev, cb) {
             db2.append(ev.value, cb)
@@ -64,6 +66,8 @@ function replicate (db, db2, cb) {
         })
     )
 }
+
+
 ```
 
 The log entries need to be in the same order in the stream as they are in  `db1`, because the flumelog-\* modules control creating the sequence number.
