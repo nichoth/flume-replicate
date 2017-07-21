@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "example": "node example/index.js"
   },
   "devDependencies": {
     "flumedb": "^0.2.3",
@@ -7,9 +8,6 @@
     "test-flumelog": "^1.0.0"
   },
   "dependencies": {
-    "pull-abortable": "^4.1.1",
-    "pull-cat": "^1.1.11",
-    "pull-defer": "^0.2.2",
     "pull-stream": "^3.6.0"
   }
 }
